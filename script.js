@@ -54,7 +54,6 @@ const employeesData = `14581160,Dương Văn Hùng
 15797387,Lê Thị Trang
 15794017,Đào Thị Huyền Trang
 15797720,Nguyễn Văn Đoàn
-16779414,Bế Thị Hương Lan
 18768485,Bùi Thị Như Huệ
 16806399,Lý  Thị Thanh
 15774534,Lục Thị Nhuận
@@ -1690,5 +1689,6 @@ Nhấn nút ⛶ trong menu để trải nghiệm tốt hơn
 
 // Initialize keyboard help
 showKeyboardHelp();
+
 
 
