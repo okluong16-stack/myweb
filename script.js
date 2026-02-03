@@ -1,70 +1,3 @@
-//==========CNC MEG=================
-
-// ===== DỮ LIỆU NHÂN VIÊN =====
-const employeesData = `14581160,Dương Văn Hùng
-16752372,Trương Văn Bắc
-13504657,Đặng Quang Tuệ
-18758792,Bùi Đức Hạnh
-18758857,Hoàng Quốc Lực
-13632101,Hoàng Văn Nam
-16787826,Lưu Đại Lượng
-17795713,Nguyễn Văn Chiến
-22526813,Nguyễn Hải Long
-21503928,Nguyễn Thúy Hiền
-14823527,Nguyễn Thanh Tùng
-19505173,Nguyễn Thị Huyền Trang
-15804462,Nguyễn Văn Hùng
-14823466,Nguyễn Văn Đông
-17810539,Trần Thị Quyên
-17795877,Đinh Tiến Dũng
-23526131,Đỗ Thúy Phương
-15825095,Đinh Thị Mai
-14827254,Nguyễn Trọng Luân
-14820126,Lê Tiến Luật
-24506056,Phạm Bá Trưởng
-14823077,Long Quang Hiếu
-15759187,Dương Công Định
-17786692,Phạm Đăng Kiên
-23520835,Vương Xuân Thành
-17776216,Nguyễn Quang Bình
-22515945,Vũ Đức Sơn
-13691141,Lại Vi Ánh
-14819985,Nguyễn Xuân Hiếu
-15836190,Trần Đức Tùng
-17795771,Bùi Xuân Thái
-24518344,Nguyễn Văn Cảnh
-22511590,Nguyễn Đình Tôn
-17795472,Vũ Quang Dũng
-13654931,Phạm Hồng Thắng
-12581823,Lý Văn Hoàn
-12510281,Hoàng Văn Tuyên
-17783181,Cao Tiến Phi
-15781693,Lê Việt Đức
-17811398,Nguyễn Duy Văn
-15753210,Trần Xuân Hùng
-15766144,Nguyễn Văn Duy
-17771885,Vũ Văn Trình
-16787871,Bùi Minh Đức
-24519062,Lê Thị Minh
-25512349,Nguyễn Hữu Mạnh
-25503707,Phạm Thu Hoài
-23520887,Trần Minh Vũ
-15804526,Đinh Công Giang
-15797460,Phan Hữu Thân
-15797387,Lê Thị Trang
-15794017,Đào Thị Huyền Trang
-15797720,Nguyễn Văn Đoàn
-16779414,Bế Thị Hương Lan
-18768485,Bùi Thị Như Huệ
-16806399,Lý  Thị Thanh
-15774534,Lục Thị Nhuận
-
-`;
-
-// ===== DỮ LIỆU KHÁCH MỜI (CHỈ QUAY TRONG GIẢI KHUYẾN KHÍCH) =====
-const guestsData = `
-`;
-
 // ===== GLOBAL VARIABLES =====
 let employees = [];
 let guests = [];
@@ -78,12 +11,13 @@ let selectedPrize = null;
 let digitIntervals = [];
 let currentWinnerCode = '';
 
-//thời gian quay
+// Prize configurations
 const prizeConfig = {
-    special: { name: 'Giải Thịnh Vượng', icon: '🏆', color: '#FFD700', spinDuration: 20000 }, //20s
-    first: { name: 'Giải Hạnh Phúc', icon: '🥇', color: '#FFA500', spinDuration: 20000 }, 
-    second: { name: 'Giải Bình An', icon: '🥈', color: '#C0C0C0', spinDuration: 20000 }, 
-    third: { name: 'Giải Cộng Đồng', icon: '🥉', color: '#CD7F32', spinDuration: 20000 } 
+    special: { name: 'Giải Đặc Biệt', icon: '🏆', color: '#FFD700', spinDuration: 40000 }, // 40s
+    first: { name: 'Giải Nhất', icon: '🥇', color: '#FFA500', spinDuration: 30000 }, // 30s
+    second: { name: 'Giải Nhì', icon: '🥈', color: '#C0C0C0', spinDuration: 20000 }, // 20s
+    third: { name: 'Giải Ba', icon: '🥉', color: '#CD7F32', spinDuration: 15000 }, // 15s
+    consolation: { name: 'Khuyến Khích', icon: '🎁', color: '#87CEEB', spinDuration: 15000 } // 15s
 };
 
 // ===== DOM ELEMENTS =====
@@ -118,9 +52,9 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeFireworks();
     resetDigitDisplay();
     initializeBackgroundMusic();
-    initializeMobileMenu();
 });
 
+// ===== BACKGROUND MUSIC =====
 function initializeBackgroundMusic() {
     const backgroundMusic = document.getElementById('backgroundMusic');
     
@@ -268,37 +202,68 @@ function selectPrize(prizeType) {
 function startSpin() {
     if (isSpinning) return;
     
-    if (availableEmployees.length === 0) {
-        showMessage('Đã hết nhân viên để quay!');
-        return;
-    }
-    
-    isSpinning = true;
-    spinBtn.disabled = true;
-    wheel.classList.add('spinning');
-    winnerSection.style.display = 'none';
-    
-    if (selectedPrize === 'special') {
-        // Giải Thịnh Vượng - 1 winner at once
-        spinSpecialPrize();
-    } else if (selectedPrize === 'first') {
-        // Giải Hạnh Phúc - 5 winners at once
-        spinFirstPrize();
+    // Check if consolation prize - use employees + guests
+    if (selectedPrize === 'consolation') {
+        const totalAvailable = availableEmployees.length + availableGuests.length;
+        if (totalAvailable === 0) {
+            showMessage('Đã hết nhân viên và khách mời để quay!');
+            return;
+        }
+        
+        isSpinning = true;
+        spinBtn.disabled = true;
+        wheel.classList.add('spinning');
+        winnerSection.style.display = 'none';
+        
+        spinConsolationPrize();
     } else if (selectedPrize === 'second') {
-        // Giải Bình An - 10 winners at once
+        // Giải Nhì - 2 winners at once
+        if (availableEmployees.length === 0) {
+            showMessage('Đã hết nhân viên để quay!');
+            return;
+        }
+        
+        isSpinning = true;
+        spinBtn.disabled = true;
+        wheel.classList.add('spinning');
+        winnerSection.style.display = 'none';
+        
         spinSecondPrize();
     } else if (selectedPrize === 'third') {
-        // Giải Cộng Đồng - 42 winners at once
+        // Giải Ba - 3 winners at once
+        if (availableEmployees.length === 0) {
+            showMessage('Đã hết nhân viên để quay!');
+            return;
+        }
+        
+        isSpinning = true;
+        spinBtn.disabled = true;
+        wheel.classList.add('spinning');
+        winnerSection.style.display = 'none';
+        
         spinThirdPrize();
+    } else {
+        // Giải Đặc Biệt và Giải Nhất - Quay từng số
+        if (availableEmployees.length === 0) {
+            showMessage('Đã hết nhân viên để quay!');
+            return;
+        }
+        
+        isSpinning = true;
+        spinBtn.disabled = true;
+        wheel.classList.add('spinning');
+        winnerSection.style.display = 'none';
+        
+        spinSinglePrize();
     }
 }
 
-function spinSpecialPrize() {
-    // Giải Thịnh Vượng - 1 winner at once
+function spinSinglePrize() {
+    // Get spin duration for selected prize
     const prize = prizeConfig[selectedPrize];
     const spinDuration = prize.spinDuration;
     
-    // Select 1 random winner
+    // Select winner
     const winnerIndex = Math.floor(Math.random() * availableEmployees.length);
     const winner = availableEmployees[winnerIndex];
     currentWinnerCode = winner.code;
@@ -306,87 +271,9 @@ function spinSpecialPrize() {
     // Start spinning all 8 digits
     startDigitSpinning();
     
-    // Stop spinning and show winner
+    // Stop spinning and show winner - display all digits at once
     setTimeout(() => {
-        stopSpecialPrize([winner], winnerIndex);
-    }, spinDuration);
-}
-
-function spinFirstPrize() {
-    // Giải Hạnh Phúc - 5 winners at once
-    const prize = prizeConfig[selectedPrize];
-    const spinDuration = prize.spinDuration;
-    
-    // Select 5 random winners
-    const numberOfWinners = Math.min(5, availableEmployees.length);
-    const firstPrizeWinners = [];
-    
-    // Shuffle and select 5 winners
-    const shuffled = [...availableEmployees];
-    shuffleArray(shuffled);
-    
-    for (let i = 0; i < numberOfWinners; i++) {
-        firstPrizeWinners.push(shuffled[i]);
-    }
-    
-    // Start spinning all 8 digits
-    startDigitSpinning();
-    
-    // Stop spinning and show winners
-    setTimeout(() => {
-        stopFirstPrize(firstPrizeWinners);
-    }, spinDuration);
-}
-
-function spinSecondPrize() {
-    // Giải Bình An - 10 winners at once
-    const prize = prizeConfig[selectedPrize];
-    const spinDuration = prize.spinDuration;
-    
-    // Select 10 random winners
-    const numberOfWinners = Math.min(10, availableEmployees.length);
-    const secondPrizeWinners = [];
-    
-    // Shuffle and select 10 winners
-    const shuffled = [...availableEmployees];
-    shuffleArray(shuffled);
-    
-    for (let i = 0; i < numberOfWinners; i++) {
-        secondPrizeWinners.push(shuffled[i]);
-    }
-    
-    // Start spinning all 8 digits
-    startDigitSpinning();
-    
-    // Stop spinning and show winners
-    setTimeout(() => {
-        stopSecondPrize(secondPrizeWinners);
-    }, spinDuration);
-}
-
-function spinThirdPrize() {
-    // Giải Cộng Đồng - 42 winners at once
-    const prize = prizeConfig[selectedPrize];
-    const spinDuration = prize.spinDuration;
-    
-    // Select 42 random winners
-    const numberOfWinners = Math.min(42, availableEmployees.length);
-    const thirdPrizeWinners = [];
-    
-    // Shuffle and select 42 winners
-    const shuffled = [...availableEmployees];
-    shuffleArray(shuffled);
-    
-    for (let i = 0; i < numberOfWinners; i++) {
-        thirdPrizeWinners.push(shuffled[i]);
-    }
-    
-    // Start spinning all 8 digits
-    startDigitSpinning();
-    
-    // Stop spinning and show winners
-    setTimeout(() => {
-        stopThirdPrize(thirdPrizeWinners);
+        stopSingleSpin(winner, winnerIndex);
     }, spinDuration);
 }
 
@@ -422,7 +309,7 @@ function revealDigit(index, digit) {
     digitBox.classList.add('revealed');
 }
 
-function stopSpecialPrize(winners, winnerIndex) {
+function stopSingleSpin(winner, winnerIndex) {
     if (!isSpinning) return;
     
     // Clear all digit intervals
@@ -433,20 +320,24 @@ function stopSpecialPrize(winners, winnerIndex) {
     spinBtn.disabled = false;
     wheel.classList.remove('spinning');
     
-    // Display single winner
-    const winner = winners[0];
+    // Display all 8 digits at once
+    for (let i = 0; i < 8; i++) {
+        const digitBox = document.getElementById(`digit${i}`);
+        digitBox.textContent = winner.code[i];
+        digitBox.classList.add('revealed');
+    }
+    
+    // Update display to show winner name
+    displayName.textContent = winner.name;
+    
+    // Display winner in celebration section
     displayWinner(winner);
     
     // Add to winners list
     addToWinners(winner);
     
     // Remove from available employees
-    if (winnerIndex !== undefined) {
-        availableEmployees.splice(winnerIndex, 1);
-    } else {
-        const winnerCodes = winners.map(w => w.code);
-        availableEmployees = availableEmployees.filter(emp => !winnerCodes.includes(emp.code));
-    }
+    availableEmployees.splice(winnerIndex, 1);
     
     // Update statistics
     updateStatistics();
@@ -462,41 +353,91 @@ function stopSpecialPrize(winners, winnerIndex) {
     playWinSound();
 }
 
-function stopFirstPrize(winners) {
-    if (!isSpinning) return;
+function spinConsolationPrize() {
+    // Combine employees and guests for consolation prize
+    const allParticipants = [...availableEmployees, ...availableGuests];
     
-    // Clear all digit intervals
-    digitIntervals.forEach(interval => clearInterval(interval));
-    digitIntervals = [];
+    // Show spinning animation for consolation prize
+    let spinCount = 0;
+    const maxSpins = 30;
     
-    isSpinning = false;
-    spinBtn.disabled = false;
-    wheel.classList.remove('spinning');
+    // Start spinning all 8 digits continuously
+    startDigitSpinning();
     
-    // Display multiple winners
-    displayMultipleWinnersFirst(winners);
+    spinInterval = setInterval(() => {
+        currentEmployeeIndex = (currentEmployeeIndex + 1) % allParticipants.length;
+        const participant = allParticipants[currentEmployeeIndex];
+        
+        // Update all digits with random numbers
+        for (let i = 0; i < 8; i++) {
+            const digitBox = document.getElementById(`digit${i}`);
+            const randomDigit = Math.floor(Math.random() * 10);
+            digitBox.textContent = randomDigit;
+        }
+        
+        displayName.textContent = participant.name;
+        spinCount++;
+        
+        // Update display to show spinning progress
+        const progressText = `Đang chọn 30 người may mắn... ${spinCount}`;
+        displayName.textContent = progressText;
+        
+        if (spinCount >= maxSpins) {
+            stopConsolationSpin();
+        }
+    }, 150);
+}
+
+function spinSecondPrize() {
+    // Get spin duration for selected prize
+    const prize = prizeConfig[selectedPrize];
+    const spinDuration = prize.spinDuration;
     
-    // Add all winners to the list
-    winners.forEach(winner => {
-        addToWinners(winner);
-    });
+    // Select 2 random winners
+    const numberOfWinners = Math.min(2, availableEmployees.length);
+    const secondPrizeWinners = [];
     
-    // Remove winners from available employees
-    const winnerCodes = winners.map(w => w.code);
-    availableEmployees = availableEmployees.filter(emp => !winnerCodes.includes(emp.code));
+    // Shuffle and select 2 winners
+    const shuffled = [...availableEmployees];
+    shuffleArray(shuffled);
     
-    // Update statistics
-    updateStatistics();
-    updateHistoryDisplay();
+    for (let i = 0; i < numberOfWinners; i++) {
+        secondPrizeWinners.push(shuffled[i]);
+    }
     
-    // Save to localStorage
-    saveWinnersToStorage();
+    // Start spinning all 8 digits
+    startDigitSpinning();
     
-    // Launch enhanced fireworks for multiple winners
-    launchMultipleFireworks();
+    // Stop spinning and show winners
+    setTimeout(() => {
+        stopSecondPrize(secondPrizeWinners);
+    }, spinDuration);
+}
+
+function spinThirdPrize() {
+    // Get spin duration for selected prize
+    const prize = prizeConfig[selectedPrize];
+    const spinDuration = prize.spinDuration;
     
-    // Play sound effect (if available)
-    playWinSound();
+    // Select 3 random winners
+    const numberOfWinners = Math.min(3, availableEmployees.length);
+    const thirdPrizeWinners = [];
+    
+    // Shuffle and select 3 winners
+    const shuffled = [...availableEmployees];
+    shuffleArray(shuffled);
+    
+    for (let i = 0; i < numberOfWinners; i++) {
+        thirdPrizeWinners.push(shuffled[i]);
+    }
+    
+    // Start spinning all 8 digits
+    startDigitSpinning();
+    
+    // Stop spinning and show winners
+    setTimeout(() => {
+        stopThirdPrize(thirdPrizeWinners);
+    }, spinDuration);
 }
 
 function stopSecondPrize(winners) {
@@ -573,6 +514,63 @@ function stopThirdPrize(winners) {
     playWinSound();
 }
 
+function stopConsolationSpin() {
+    if (!isSpinning) return;
+    
+    clearInterval(spinInterval);
+    
+    // Clear all digit intervals
+    digitIntervals.forEach(interval => clearInterval(interval));
+    digitIntervals = [];
+    
+    isSpinning = false;
+    spinBtn.disabled = false;
+    wheel.classList.remove('spinning');
+    
+    // Combine employees and guests for consolation prize
+    const allParticipants = [...availableEmployees, ...availableGuests];
+    
+    // Select 30 random winners
+    const numberOfWinners = Math.min(30, allParticipants.length);
+    const consolationWinners = [];
+    
+    // Shuffle and select 30 winners
+    const shuffled = [...allParticipants];
+    shuffleArray(shuffled);
+    
+    for (let i = 0; i < numberOfWinners; i++) {
+        consolationWinners.push(shuffled[i]);
+    }
+    
+    console.log('Consolation winners:', consolationWinners); // Debug log
+    
+    // Display multiple winners
+    displayMultipleWinners(consolationWinners);
+    
+    // Add all winners to the list
+    consolationWinners.forEach(winner => {
+        addToWinners(winner);
+    });
+    
+    // Remove winners from available employees and guests
+    const winnerCodes = consolationWinners.map(w => w.code);
+    availableEmployees = availableEmployees.filter(emp => !winnerCodes.includes(emp.code));
+    availableGuests = availableGuests.filter(guest => !winnerCodes.includes(guest.code));
+    
+    // Update statistics
+    updateStatistics();
+    updateHistoryDisplay();
+    
+    // Save to localStorage
+    saveWinnersToStorage();
+    
+    // Launch enhanced fireworks for multiple winners
+    launchMultipleFireworks();
+    
+    // Play sound effect (if available)
+    playWinSound();
+}
+
 function resetSpin() {
     if (isSpinning) {
         stopSpin();
@@ -605,193 +603,6 @@ function displayWinner(winner) {
     }, 10);
 }
 
-function displayMultipleWinnersSpecial(winners) {
-    console.log('displayMultipleWinnersSpecial called with:', winners.length, 'winners');
-    
-    // Hide main content
-    const container = document.querySelector('.container');
-    const footer = document.querySelector('.footer');
-    if (container) container.style.display = 'none';
-    if (footer) footer.style.display = 'none';
-    
-    // Divide winners into 4 groups: 10, 10, 10, 12
-    const group1 = winners.slice(0, 10);
-    const group2 = winners.slice(10, 20);
-    const group3 = winners.slice(20, 30);
-    const group4 = winners.slice(30, 42);
-    
-    // Create full screen display with 4 groups
-    const fullScreenHTML = `
-        <div class="multiple-winners-fullscreen" id="multipleWinnersFullscreen">
-            <div class="fullscreen-header">
-                <h1 class="fullscreen-title">🎉 CHÚC MỪNG ${winners.length} NGƯỜI MAY MẮN 🎉</h1>
-                <p class="fullscreen-subtitle">GIẢI THỊNH VƯỢNG</p>
-                <button class="fullscreen-close-btn" id="closeFullscreenBtn">✕ ĐÓNG</button>
-            </div>
-            <div class="fullscreen-winners-container">
-                <div class="winner-group">
-                    <h3 class="group-title">🏆 NHÓM 1</h3>
-                    <div class="fullscreen-winners-grid">
-                        ${group1.map((winner, index) => `
-                            <div class="fullscreen-winner-item" style="animation-delay: ${index * 0.05}s">
-                                <span class="winner-number">${index + 1}</span>
-                                <span class="winner-code">${winner.code}<br>${winner.name}</span>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-                <div class="winner-group">
-                    <h3 class="group-title">🏆 NHÓM 2</h3>
-                    <div class="fullscreen-winners-grid">
-                        ${group2.map((winner, index) => `
-                            <div class="fullscreen-winner-item" style="animation-delay: ${index * 0.05}s">
-                                <span class="winner-number">${index + 11}</span>
-                                <span class="winner-code">${winner.code}<br>${winner.name}</span>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-                <div class="winner-group">
-                    <h3 class="group-title">🏆 NHÓM 3</h3>
-                    <div class="fullscreen-winners-grid">
-                        ${group3.map((winner, index) => `
-                            <div class="fullscreen-winner-item" style="animation-delay: ${index * 0.05}s">
-                                <span class="winner-number">${index + 21}</span>
-                                <span class="winner-code">${winner.code}<br>${winner.name}</span>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-                <div class="winner-group">
-                    <h3 class="group-title">🏆 NHÓM 4</h3>
-                    <div class="fullscreen-winners-grid">
-                        ${group4.map((winner, index) => `
-                            <div class="fullscreen-winner-item" style="animation-delay: ${index * 0.05}s">
-                                <span class="winner-number">${index + 31}</span>
-                                <span class="winner-code">${winner.code}<br>${winner.name}</span>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
-    
-    console.log('Adding fullscreen HTML to body');
-    
-    // Add to body
-    document.body.insertAdjacentHTML('beforeend', fullScreenHTML);
-    
-    // Show with animation immediately
-    setTimeout(() => {
-        const fullscreen = document.getElementById('multipleWinnersFullscreen');
-        if (fullscreen) {
-            console.log('Adding active class to fullscreen');
-            fullscreen.classList.add('active');
-            
-            // Add close button functionality
-            const closeBtn = document.getElementById('closeFullscreenBtn');
-            if (closeBtn) {
-                closeBtn.addEventListener('click', closeMultipleWinnersFullscreen);
-            }
-            
-            // Also close on Escape key
-            document.addEventListener('keydown', function escHandler(e) {
-                if (e.code === 'Escape') {
-                    closeMultipleWinnersFullscreen();
-                    document.removeEventListener('keydown', escHandler);
-                }
-            });
-            
-            // Play enhanced sound for multiple winners
-            playWinSound();
-            
-            // Launch enhanced fireworks
-            launchMultipleFireworks();
-        } else {
-            console.error('Fullscreen element not found!');
-        }
-    }, 100);
-    
-    // Update wheel display to show number of winners
-    resetDigitDisplay();
-    displayName.textContent = `TRÚNG GIẢI THỊNH VƯỢNG`;
-}
-
-function displayMultipleWinnersFirst(winners) {
-    console.log('displayMultipleWinnersFirst called with:', winners.length, 'winners');
-    
-    // Hide main content
-    const container = document.querySelector('.container');
-    const footer = document.querySelector('.footer');
-    if (container) container.style.display = 'none';
-    if (footer) footer.style.display = 'none';
-    
-    // Create full screen display for 10 winners
-    const fullScreenHTML = `
-        <div class="multiple-winners-fullscreen" id="multipleWinnersFullscreen">
-            <div class="fullscreen-header">
-                <h1 class="fullscreen-title">🎉 CHÚC MỪNG ${winners.length} NGƯỜI MAY MẮN 🎉</h1>
-                <p class="fullscreen-subtitle">GIẢI HẠNH PHÚC</p>
-                <button class="fullscreen-close-btn" id="closeFullscreenBtn">✕ ĐÓNG</button>
-            </div>
-            <div class="fullscreen-winners-container">
-                <div class="winner-group">
-                    <h3 class="group-title">🥇 DANH SÁCH TRÚNG GIẢI</h3>
-                    <div class="fullscreen-winners-grid">
-                        ${winners.map((winner, index) => `
-                            <div class="fullscreen-winner-item" style="animation-delay: ${index * 0.05}s">
-                                <span class="winner-number">${index + 1}</span>
-                                <span class="winner-code">${winner.code}<br>${winner.name}</span>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
-    
-    console.log('Adding fullscreen HTML to body');
-    
-    // Add to body
-    document.body.insertAdjacentHTML('beforeend', fullScreenHTML);
-    
-    // Show with animation immediately
-    setTimeout(() => {
-        const fullscreen = document.getElementById('multipleWinnersFullscreen');
-        if (fullscreen) {
-            console.log('Adding active class to fullscreen');
-            fullscreen.classList.add('active');
-            
-            // Add close button functionality
-            const closeBtn = document.getElementById('closeFullscreenBtn');
-            if (closeBtn) {
-                closeBtn.addEventListener('click', closeMultipleWinnersFullscreen);
-            }
-            
-            // Also close on Escape key
-            document.addEventListener('keydown', function escHandler(e) {
-                if (e.code === 'Escape') {
-                    closeMultipleWinnersFullscreen();
-                    document.removeEventListener('keydown', escHandler);
-                }
-            });
-            
-            // Play enhanced sound for multiple winners
-            playWinSound();
-            
-            // Launch enhanced fireworks
-            launchMultipleFireworks();
-        } else {
-            console.error('Fullscreen element not found!');
-        }
-    }, 100);
-    
-    // Update wheel display to show number of winners
-    resetDigitDisplay();
-    displayName.textContent = `TRÚNG GIẢI HẠNH PHÚC`;
-}
-
 function displayMultipleWinnersSecond(winners) {
     console.log('displayMultipleWinnersSecond called with:', winners.length, 'winners');
     
@@ -801,12 +612,12 @@ function displayMultipleWinnersSecond(winners) {
     if (container) container.style.display = 'none';
     if (footer) footer.style.display = 'none';
     
-    // Create full screen display for 10 winners
+    // Create full screen display for 2 winners
     const fullScreenHTML = `
         <div class="multiple-winners-fullscreen" id="multipleWinnersFullscreen">
             <div class="fullscreen-header">
                 <h1 class="fullscreen-title">🎉 CHÚC MỪNG ${winners.length} NGƯỜI MAY MẮN 🎉</h1>
-                <p class="fullscreen-subtitle">GIẢI BÌNH AN</p>
+                <p class="fullscreen-subtitle">GIẢI NHÌ</p>
                 <button class="fullscreen-close-btn" id="closeFullscreenBtn">✕ ĐÓNG</button>
             </div>
             <div class="fullscreen-winners-container">
@@ -814,7 +625,7 @@ function displayMultipleWinnersSecond(winners) {
                     <h3 class="group-title">🥈 DANH SÁCH TRÚNG GIẢI</h3>
                     <div class="fullscreen-winners-grid">
                         ${winners.map((winner, index) => `
-                            <div class="fullscreen-winner-item" style="animation-delay: ${index * 0.05}s">
+                            <div class="fullscreen-winner-item" style="animation-delay: ${index * 0.1}s">
                                 <span class="winner-number">${index + 1}</span>
                                 <span class="winner-code">${winner.code}<br>${winner.name}</span>
                             </div>
@@ -863,7 +674,7 @@ function displayMultipleWinnersSecond(winners) {
     
     // Update wheel display to show number of winners
     resetDigitDisplay();
-    displayName.textContent = `TRÚNG GIẢI BÌNH AN`;
+    displayName.textContent = `TRÚNG GIẢI NHÌ`;
 }
 
 function displayMultipleWinnersThird(winners) {
@@ -875,60 +686,21 @@ function displayMultipleWinnersThird(winners) {
     if (container) container.style.display = 'none';
     if (footer) footer.style.display = 'none';
     
-    // Divide winners into 4 groups: 10, 10, 10, 12
-    const group1 = winners.slice(0, 10);
-    const group2 = winners.slice(10, 20);
-    const group3 = winners.slice(20, 30);
-    const group4 = winners.slice(30, 42);
-    
-    // Create full screen display with 4 groups
+    // Create full screen display for 3 winners
     const fullScreenHTML = `
         <div class="multiple-winners-fullscreen" id="multipleWinnersFullscreen">
             <div class="fullscreen-header">
                 <h1 class="fullscreen-title">🎉 CHÚC MỪNG ${winners.length} NGƯỜI MAY MẮN 🎉</h1>
-                <p class="fullscreen-subtitle">GIẢI CỘNG ĐỒNG</p>
+                <p class="fullscreen-subtitle">GIẢI BA</p>
                 <button class="fullscreen-close-btn" id="closeFullscreenBtn">✕ ĐÓNG</button>
             </div>
             <div class="fullscreen-winners-container">
                 <div class="winner-group">
-                    <h3 class="group-title">🥉 NHÓM 1</h3>
+                    <h3 class="group-title">🥉 DANH SÁCH TRÚNG GIẢI</h3>
                     <div class="fullscreen-winners-grid">
-                        ${group1.map((winner, index) => `
-                            <div class="fullscreen-winner-item" style="animation-delay: ${index * 0.05}s">
+                        ${winners.map((winner, index) => `
+                            <div class="fullscreen-winner-item" style="animation-delay: ${index * 0.1}s">
                                 <span class="winner-number">${index + 1}</span>
-                                <span class="winner-code">${winner.code}<br>${winner.name}</span>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-                <div class="winner-group">
-                    <h3 class="group-title">🥉 NHÓM 2</h3>
-                    <div class="fullscreen-winners-grid">
-                        ${group2.map((winner, index) => `
-                            <div class="fullscreen-winner-item" style="animation-delay: ${index * 0.05}s">
-                                <span class="winner-number">${index + 11}</span>
-                                <span class="winner-code">${winner.code}<br>${winner.name}</span>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-                <div class="winner-group">
-                    <h3 class="group-title">🥉 NHÓM 3</h3>
-                    <div class="fullscreen-winners-grid">
-                        ${group3.map((winner, index) => `
-                            <div class="fullscreen-winner-item" style="animation-delay: ${index * 0.05}s">
-                                <span class="winner-number">${index + 21}</span>
-                                <span class="winner-code">${winner.code}<br>${winner.name}</span>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-                <div class="winner-group">
-                    <h3 class="group-title">🥉 NHÓM 4</h3>
-                    <div class="fullscreen-winners-grid">
-                        ${group4.map((winner, index) => `
-                            <div class="fullscreen-winner-item" style="animation-delay: ${index * 0.05}s">
-                                <span class="winner-number">${index + 31}</span>
                                 <span class="winner-code">${winner.code}<br>${winner.name}</span>
                             </div>
                         `).join('')}
@@ -976,7 +748,7 @@ function displayMultipleWinnersThird(winners) {
     
     // Update wheel display to show number of winners
     resetDigitDisplay();
-    displayName.textContent = `TRÚNG GIẢI CỘNG ĐỒNG`;
+    displayName.textContent = `TRÚNG GIẢI BA`;
 }
 
 function displayMultipleWinners(winners) {
@@ -1600,93 +1372,6 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
-
-// ===== MOBILE MENU =====
-function initializeMobileMenu() {
-    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-    const mobileMenu = document.getElementById('mobileMenu');
-    const mobileSoundToggle = document.getElementById('mobileSoundToggle');
-    const mobileFullscreenBtn = document.getElementById('mobileFullscreenBtn');
-    const mobileHelpBtn = document.getElementById('mobileHelpBtn');
-    
-    if (!mobileMenuBtn || !mobileMenu) return;
-    
-    // Toggle menu
-    mobileMenuBtn.addEventListener('click', function() {
-        mobileMenuBtn.classList.toggle('active');
-        mobileMenu.classList.toggle('active');
-    });
-    
-    // Close menu when clicking outside
-    document.addEventListener('click', function(e) {
-        if (!mobileMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
-            mobileMenuBtn.classList.remove('active');
-            mobileMenu.classList.remove('active');
-        }
-    });
-    
-    // Sound toggle
-    if (mobileSoundToggle) {
-        mobileSoundToggle.addEventListener('click', function() {
-            const backgroundMusic = document.getElementById('backgroundMusic');
-            if (backgroundMusic) {
-                if (backgroundMusic.paused) {
-                    backgroundMusic.play();
-                    mobileSoundToggle.textContent = '🔊 Nhạc nền';
-                    showMessage('Đã bật nhạc nền');
-                } else {
-                    backgroundMusic.pause();
-                    mobileSoundToggle.textContent = '🔇 Tắt nhạc';
-                    showMessage('Đã tắt nhạc nền');
-                }
-            }
-            // Close menu
-            mobileMenuBtn.classList.remove('active');
-            mobileMenu.classList.remove('active');
-        });
-    }
-    
-    // Fullscreen toggle
-    if (mobileFullscreenBtn) {
-        mobileFullscreenBtn.addEventListener('click', function() {
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().catch(err => {
-                    showMessage('Không thể vào chế độ toàn màn hình');
-                });
-            } else {
-                document.exitFullscreen();
-            }
-            // Close menu
-            mobileMenuBtn.classList.remove('active');
-            mobileMenu.classList.remove('active');
-        });
-    }
-    
-    // Help button
-    if (mobileHelpBtn) {
-        mobileHelpBtn.addEventListener('click', function() {
-            const helpText = `
-🎮 HƯỚNG DẪN SỬ DỤNG
-
-1. Chọn giải thưởng muốn quay
-2. Nhấn "BẮT ĐẦU QUAY" để bắt đầu
-3. Chờ đợi kết quả
-
-⌨️ Phím tắt:
-• Space: Bắt đầu quay
-• Esc: Đóng màn hình
-• Ctrl+R: Xóa lịch sử
-
-📱 Chế độ toàn màn hình:
-Nhấn nút ⛶ trong menu để trải nghiệm tốt hơn
-            `;
-            alert(helpText);
-            // Close menu
-            mobileMenuBtn.classList.remove('active');
-            mobileMenu.classList.remove('active');
-        });
-    }
-}
 
 // Initialize keyboard help
 showKeyboardHelp();
