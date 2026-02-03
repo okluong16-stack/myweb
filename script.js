@@ -1,4 +1,69 @@
+//===========CNC MEG=================
 
+// ===== DỮ LIỆU NHÂN VIÊN =====
+const employeesData = `14581160,Dương Văn Hùng
+16752372,Trương Văn Bắc
+13504657,Đặng Quang Tuệ
+18758792,Bùi Đức Hạnh
+18758857,Hoàng Quốc Lực
+13632101,Hoàng Văn Nam
+16787826,Lưu Đại Lượng
+17795713,Nguyễn Văn Chiến
+22526813,Nguyễn Hải Long
+21503928,Nguyễn Thúy Hiền
+14823527,Nguyễn Thanh Tùng
+19505173,Nguyễn Thị Huyền Trang
+15804462,Nguyễn Văn Hùng
+14823466,Nguyễn Văn Đông
+17810539,Trần Thị Quyên
+17795877,Đinh Tiến Dũng
+23526131,Đỗ Thúy Phương
+15825095,Đinh Thị Mai
+14827254,Nguyễn Trọng Luân
+14820126,Lê Tiến Luật
+24506056,Phạm Bá Trưởng
+14823077,Long Quang Hiếu
+15759187,Dương Công Định
+17786692,Phạm Đăng Kiên
+23520835,Vương Xuân Thành
+17776216,Nguyễn Quang Bình
+22515945,Vũ Đức Sơn
+13691141,Lại Vi Ánh
+14819985,Nguyễn Xuân Hiếu
+15836190,Trần Đức Tùng
+17795771,Bùi Xuân Thái
+24518344,Nguyễn Văn Cảnh
+22511590,Nguyễn Đình Tôn
+17795472,Vũ Quang Dũng
+13654931,Phạm Hồng Thắng
+12581823,Lý Văn Hoàn
+12510281,Hoàng Văn Tuyên
+17783181,Cao Tiến Phi
+15781693,Lê Việt Đức
+17811398,Nguyễn Duy Văn
+15753210,Trần Xuân Hùng
+15766144,Nguyễn Văn Duy
+17771885,Vũ Văn Trình
+16787871,Bùi Minh Đức
+24519062,Lê Thị Minh
+25512349,Nguyễn Hữu Mạnh
+25503707,Phạm Thu Hoài
+23520887,Trần Minh Vũ
+15804526,Đinh Công Giang
+15797460,Phan Hữu Thân
+15797387,Lê Thị Trang
+15794017,Đào Thị Huyền Trang
+15797720,Nguyễn Văn Đoàn
+16779414,Bế Thị Hương Lan
+18768485,Bùi Thị Như Huệ
+16806399,Lý  Thị Thanh
+15774534,Lục Thị Nhuận
+
+`;
+
+// ===== DỮ LIỆU KHÁCH MỜI (CHỈ QUAY TRONG GIẢI KHUYẾN KHÍCH) =====
+const guestsData = `
+`;
 
 // ===== GLOBAL VARIABLES =====
 let employees = [];
@@ -1625,3 +1690,4 @@ Nhấn nút ⛶ trong menu để trải nghiệm tốt hơn
 
 // Initialize keyboard help
 showKeyboardHelp();
+
