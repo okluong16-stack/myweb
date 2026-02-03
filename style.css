@@ -216,6 +216,108 @@ body {
     z-index: 1;
 }
 
+/* ===== MOBILE HEADER ===== */
+.mobile-header {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    padding: 10px 15px;
+    background: rgba(15, 12, 41, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mobile-menu-btn {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    z-index: 1001;
+}
+
+.mobile-menu-btn span {
+    width: 100%;
+    height: 3px;
+    background: var(--neon-blue);
+    border-radius: 3px;
+    transition: all 0.3s ease;
+}
+
+.mobile-menu-btn.active span:nth-child(1) {
+    transform: rotate(45deg) translate(8px, 8px);
+}
+
+.mobile-menu-btn.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.mobile-menu-btn.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -7px);
+}
+
+.mobile-menu {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    right: 0;
+    background: rgba(15, 12, 41, 0.98);
+    backdrop-filter: blur(15px);
+    padding: 20px;
+    transform: translateY(-150%);
+    transition: transform 0.3s ease;
+    z-index: 999;
+    border-bottom: 2px solid var(--neon-blue);
+}
+
+.mobile-menu.active {
+    transform: translateY(0);
+}
+
+.mobile-menu-item {
+    display: block;
+    width: 100%;
+    padding: 15px 20px;
+    margin-bottom: 10px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--border-radius-small);
+    color: var(--text-primary);
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.3s ease;
+    touch-action: manipulation;
+}
+
+.mobile-menu-item:hover {
+    background: rgba(0, 212, 255, 0.2);
+    border-color: var(--neon-blue);
+    transform: translateX(5px);
+}
+
+.mobile-menu-item:active {
+    transform: scale(0.98);
+}
+
+@media (max-width: 768px) {
+    .mobile-header {
+        display: block;
+    }
+    
+    .container {
+        padding-top: 70px;
+    }
+}
+
 /* ===== HEADER ===== */
 .header {
     text-align: center;
@@ -975,207 +1077,30 @@ body {
 }
 
 /* ===== RESPONSIVE DESIGN ===== */
-
-/* Tablet and below (768px) */
 @media (max-width: 768px) {
-    .container {
-        padding: 15px;
-    }
-    
-    /* Header adjustments */
-    .header {
-        margin-bottom: 30px;
-    }
-    
-    .main-title {
-        font-size: 2rem;
-        letter-spacing: 1px;
-    }
-    
-    .title-year {
-        font-size: 1.3rem;
-    }
-    
-    /* Prize section */
-    .section-title {
-        font-size: 1.5rem;
-        margin-bottom: 20px;
-    }
-    
-    .prize-selector {
-        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-        gap: 15px;
-    }
-    
-    .prize-card {
-        padding: 20px 15px;
-    }
-    
-    .prize-icon {
-        font-size: 2.5rem;
-        margin-bottom: 10px;
-    }
-    
-    .prize-name {
-        font-size: 1rem;
-    }
-    
-    .prize-count {
-        font-size: 0.85rem;
-        padding: 4px 8px;
-    }
-    
-    /* Current prize display */
-    .current-prize-display {
-        padding: 12px 20px;
-        margin-bottom: 20px;
-    }
-    
-    .current-prize-text {
-        font-size: 1.1rem;
-    }
-    
-    /* Wheel section */
-    .wheel-container {
-        width: 300px;
-        height: 300px;
-    }
-    
-    .wheel-text {
-        padding: 15px;
-    }
-    
-    .digit-display {
-        gap: 8px;
-        margin-bottom: 15px;
-    }
-    
-    .digit-box {
-        width: 40px;
-        height: 55px;
-        font-size: 1.6rem;
-        border-radius: 8px;
-    }
-    
-    .employee-name {
-        font-size: 1.1rem;
-    }
-    
-    /* Controls */
-    .controls {
-        flex-direction: column;
-        width: 100%;
-        gap: 15px;
-    }
-    
-    .btn {
-        width: 100%;
-        max-width: 300px;
-        padding: 14px 30px;
-        font-size: 1rem;
-    }
-    
-    /* Winner section */
-    .winner-card {
-        padding: 30px 20px;
-    }
-    
-    .winner-title {
-        font-size: 2rem;
-    }
-    
-    .winner-code {
-        font-size: 1.5rem;
-    }
-    
-    .winner-name {
-        font-size: 1.3rem;
-    }
-    
-    /* Statistics */
-    .stats-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 15px;
-    }
-    
-    .stat-card {
-        padding: 15px;
-    }
-    
-    .stat-number {
-        font-size: 1.6rem;
-    }
-    
-    .stat-label {
-        font-size: 0.8rem;
-    }
-    
-    /* History */
-    .history-header {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 10px;
-    }
-    
-    .history-header h3 {
-        font-size: 1.3rem;
-    }
-    
-    .history-list {
-        padding: 15px;
-        max-height: 400px;
-    }
-    
-    .history-item {
-        padding: 12px;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-    }
-    
-    .history-info {
-        width: 100%;
-    }
-    
-    .history-time {
-        align-self: flex-end;
-        font-size: 0.8rem;
-    }
-    
-    /* Footer */
-    .footer {
-        margin-top: 30px;
-        padding: 15px;
-        font-size: 0.85rem;
-    }
-}
-
-/* Mobile (480px) */
-@media (max-width: 480px) {
     .container {
         padding: 10px;
     }
     
-    /* Header */
     .header {
         margin-bottom: 20px;
     }
     
     .main-title {
-        font-size: 1.6rem;
-        letter-spacing: 0.5px;
+        font-size: 1.8rem;
+        letter-spacing: 1px;
     }
     
     .title-year {
-        font-size: 1.1rem;
+        font-size: 1.2rem;
     }
     
-    /* Prize section */
     .section-title {
-        font-size: 1.3rem;
+        font-size: 1.4rem;
         margin-bottom: 15px;
     }
     
+    /* Prize cards - better mobile layout */
     .prize-selector {
         grid-template-columns: repeat(2, 1fr);
         gap: 12px;
@@ -1187,7 +1112,7 @@ body {
     
     .prize-icon {
         font-size: 2rem;
-        margin-bottom: 8px;
+        margin-bottom: 10px;
     }
     
     .prize-name {
@@ -1196,12 +1121,12 @@ body {
     
     .prize-count {
         font-size: 0.8rem;
-        padding: 3px 6px;
+        padding: 3px 8px;
     }
     
     /* Current prize display */
     .current-prize-display {
-        padding: 10px 15px;
+        padding: 12px 15px;
         margin-bottom: 15px;
     }
     
@@ -1209,55 +1134,59 @@ body {
         font-size: 1rem;
     }
     
-    /* Wheel section */
+    /* Wheel - more responsive */
     .wheel-container {
-        width: 250px;
-        height: 250px;
-    }
-    
-    .wheel-text {
-        padding: 10px;
+        width: 280px;
+        height: 280px;
     }
     
     .digit-display {
-        gap: 6px;
-        margin-bottom: 12px;
+        gap: 5px;
+        margin-bottom: 15px;
     }
     
     .digit-box {
-        width: 32px;
-        height: 45px;
-        font-size: 1.3rem;
-        border-radius: 6px;
+        width: 35px;
+        height: 50px;
+        font-size: 1.5rem;
+        border-radius: 8px;
     }
     
     .employee-name {
-        font-size: 0.95rem;
+        font-size: 0.9rem;
         line-height: 1.4;
     }
     
-    /* Controls */
+    /* Controls - better touch targets */
     .controls {
+        flex-direction: column;
+        width: 100%;
         gap: 12px;
     }
     
     .btn {
-        padding: 12px 25px;
-        font-size: 0.95rem;
+        width: 100%;
         max-width: 100%;
+        padding: 18px 30px;
+        font-size: 1rem;
+        min-height: 55px;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
     }
     
-    /* Winner section */
+    /* Winner card */
     .winner-card {
         padding: 25px 15px;
     }
     
     .winner-title {
-        font-size: 1.6rem;
+        font-size: 1.8rem;
+        margin-bottom: 15px;
     }
     
     .winner-code {
-        font-size: 1.3rem;
+        font-size: 1.4rem;
+        margin-bottom: 10px;
     }
     
     .winner-name {
@@ -1265,26 +1194,205 @@ body {
     }
     
     /* Statistics */
+    .stats-section {
+        margin-top: 15px;
+    }
+    
     .stats-grid {
-        grid-template-columns: 1fr;
-        gap: 12px;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
     }
     
     .stat-card {
-        padding: 12px;
+        padding: 15px 10px;
     }
     
     .stat-number {
-        font-size: 1.8rem;
+        font-size: 1.5rem;
     }
     
     .stat-label {
+        font-size: 0.75rem;
+    }
+    
+    /* History */
+    .history-section {
+        margin-top: 15px;
+    }
+    
+    .history-header {
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .history-header h3 {
+        font-size: 1.2rem;
+        flex: 1;
+    }
+    
+    .history-list {
+        padding: 15px;
+        max-height: 400px;
+    }
+    
+    .history-item {
+        padding: 12px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+    
+    .history-info {
+        width: 100%;
+    }
+    
+    .history-prize {
         font-size: 0.85rem;
+        margin-bottom: 3px;
+    }
+    
+    .history-code {
+        font-size: 1rem;
+    }
+    
+    .history-name {
+        font-size: 0.9rem;
+        margin-top: 3px;
+    }
+    
+    .history-time {
+        font-size: 0.8rem;
+        align-self: flex-end;
+    }
+    
+    /* Footer */
+    .footer {
+        margin-top: 30px;
+        padding: 15px;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 8px;
+    }
+    
+    .header {
+        margin-bottom: 15px;
+    }
+    
+    .main-title {
+        font-size: 1.5rem;
+        letter-spacing: 0.5px;
+    }
+    
+    .title-year {
+        font-size: 1rem;
+    }
+    
+    .section-title {
+        font-size: 1.2rem;
+        margin-bottom: 12px;
+    }
+    
+    /* Prize cards - single column on very small screens */
+    .prize-selector {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+    
+    .prize-card {
+        padding: 12px 8px;
+    }
+    
+    .prize-icon {
+        font-size: 1.8rem;
+        margin-bottom: 8px;
+    }
+    
+    .prize-name {
+        font-size: 0.85rem;
+    }
+    
+    .prize-count {
+        font-size: 0.75rem;
+        padding: 2px 6px;
+    }
+    
+    /* Wheel - smaller for very small screens */
+    .wheel-container {
+        width: 240px;
+        height: 240px;
+    }
+    
+    .digit-display {
+        gap: 4px;
+        margin-bottom: 12px;
+    }
+    
+    .digit-box {
+        width: 28px;
+        height: 40px;
+        font-size: 1.2rem;
+        border-radius: 6px;
+    }
+    
+    .employee-name {
+        font-size: 0.85rem;
+    }
+    
+    /* Controls */
+    .controls {
+        gap: 10px;
+    }
+    
+    .btn {
+        padding: 15px 25px;
+        font-size: 0.95rem;
+        min-height: 50px;
+    }
+    
+    /* Winner card */
+    .winner-card {
+        padding: 20px 12px;
+    }
+    
+    .winner-title {
+        font-size: 1.5rem;
+        margin-bottom: 12px;
+    }
+    
+    .winner-code {
+        font-size: 1.2rem;
+        margin-bottom: 8px;
+    }
+    
+    .winner-name {
+        font-size: 1rem;
+    }
+    
+    /* Statistics - 3 columns still but smaller */
+    .stats-grid {
+        gap: 8px;
+    }
+    
+    .stat-card {
+        padding: 12px 8px;
+    }
+    
+    .stat-number {
+        font-size: 1.3rem;
+    }
+    
+    .stat-label {
+        font-size: 0.7rem;
     }
     
     /* History */
     .history-header h3 {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
     }
     
     .history-list {
@@ -1297,7 +1405,7 @@ body {
     }
     
     .history-prize {
-        font-size: 0.85rem;
+        font-size: 0.8rem;
     }
     
     .history-code {
@@ -1305,157 +1413,17 @@ body {
     }
     
     .history-name {
-        font-size: 0.9rem;
-    }
-    
-    /* Footer */
-    .footer {
-        margin-top: 25px;
-        padding: 12px;
-        font-size: 0.8rem;
-    }
-}
-
-/* Small mobile (360px) */
-@media (max-width: 360px) {
-    .container {
-        padding: 8px;
-    }
-    
-    .main-title {
-        font-size: 1.4rem;
-    }
-    
-    .title-year {
-        font-size: 1rem;
-    }
-    
-    .prize-selector {
-        gap: 10px;
-    }
-    
-    .prize-card {
-        padding: 12px 8px;
-    }
-    
-    .prize-icon {
-        font-size: 1.8rem;
-    }
-    
-    .prize-name {
         font-size: 0.85rem;
     }
     
-    .wheel-container {
-        width: 220px;
-        height: 220px;
-    }
-    
-    .digit-display {
-        gap: 5px;
-    }
-    
-    .digit-box {
-        width: 28px;
-        height: 40px;
-        font-size: 1.1rem;
-    }
-    
-    .employee-name {
-        font-size: 0.85rem;
-    }
-    
-    .btn {
-        padding: 10px 20px;
-        font-size: 0.9rem;
-    }
-    
-    .winner-title {
-        font-size: 1.4rem;
-    }
-    
-    .winner-code {
-        font-size: 1.2rem;
-    }
-    
-    .winner-name {
-        font-size: 1rem;
+    .history-time {
+        font-size: 0.75rem;
     }
 }
 
-/* Landscape mobile */
-@media (max-width: 768px) and (orientation: landscape) {
-    .header {
-        margin-bottom: 15px;
-    }
-    
-    .main-title {
-        font-size: 1.5rem;
-    }
-    
-    .title-year {
-        font-size: 1rem;
-    }
-    
-    .prize-selector {
-        grid-template-columns: repeat(5, 1fr);
-        gap: 10px;
-    }
-    
-    .prize-card {
-        padding: 12px 8px;
-    }
-    
-    .prize-icon {
-        font-size: 1.8rem;
-        margin-bottom: 5px;
-    }
-    
-    .prize-name {
-        font-size: 0.85rem;
-    }
-    
-    .wheel-container {
-        width: 200px;
-        height: 200px;
-    }
-    
-    .digit-display {
-        gap: 5px;
-        margin-bottom: 10px;
-    }
-    
-    .digit-box {
-        width: 28px;
-        height: 40px;
-        font-size: 1.2rem;
-    }
-    
-    .employee-name {
-        font-size: 0.9rem;
-    }
-    
-    .controls {
-        flex-direction: row;
-        gap: 10px;
-    }
-    
-    .btn {
-        padding: 10px 20px;
-        font-size: 0.9rem;
-    }
-    
-    .stats-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-/* Touch device optimizations */
-@media (hover: none) and (pointer: coarse) {
-    .prize-card:hover {
-        transform: none;
-    }
-    
+/* ===== MOBILE-SPECIFIC ENHANCEMENTS ===== */
+@media (max-width: 768px) {
+    /* Better touch feedback */
     .prize-card:active {
         transform: scale(0.98);
     }
@@ -1464,31 +1432,136 @@ body {
         transform: scale(0.98);
     }
     
-    .stat-card:hover {
-        transform: none;
+    /* Smooth scrolling */
+    * {
+        -webkit-overflow-scrolling: touch;
     }
     
-    .history-item:hover {
-        transform: none;
+    /* Prevent text selection on buttons */
+    .btn,
+    .prize-card {
+        user-select: none;
+        -webkit-user-select: none;
     }
     
-    .multiple-winner-item:hover {
-        transform: none;
+    /* Better focus states for keyboard navigation */
+    .btn:focus-visible,
+    .prize-card:focus-visible {
+        outline: 3px solid var(--neon-blue);
+        outline-offset: 2px;
     }
     
-    .fullscreen-winner-item:hover {
-        transform: none;
+    /* Optimize animations for mobile */
+    @media (prefers-reduced-motion: no-preference) {
+        .prize-card,
+        .btn,
+        .stat-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
     }
 }
 
-/* High DPI displays */
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-    .wheel-border {
-        border-width: 2px;
+/* ===== LANDSCAPE MOBILE ===== */
+@media (max-width: 768px) and (orientation: landscape) {
+    .header {
+        margin-bottom: 10px;
+    }
+    
+    .main-title {
+        font-size: 1.4rem;
+    }
+    
+    .title-year {
+        font-size: 0.9rem;
+    }
+    
+    .prize-selector {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+    }
+    
+    .prize-card {
+        padding: 10px 5px;
+    }
+    
+    .prize-icon {
+        font-size: 1.5rem;
+        margin-bottom: 5px;
+    }
+    
+    .prize-name {
+        font-size: 0.75rem;
+    }
+    
+    .wheel-container {
+        width: 200px;
+        height: 200px;
+    }
+    
+    .digit-display {
+        gap: 3px;
+        margin-bottom: 8px;
     }
     
     .digit-box {
-        border-width: 1px;
+        width: 22px;
+        height: 32px;
+        font-size: 1rem;
+    }
+    
+    .employee-name {
+        font-size: 0.75rem;
+    }
+    
+    .controls {
+        flex-direction: row;
+        gap: 10px;
+    }
+    
+    .btn {
+        flex: 1;
+        padding: 12px 20px;
+        font-size: 0.9rem;
+        min-height: 45px;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+    }
+    
+    .stat-card {
+        padding: 10px 8px;
+    }
+    
+    .stat-number {
+        font-size: 1.2rem;
+    }
+    
+    .stat-label {
+        font-size: 0.7rem;
+    }
+}
+
+/* ===== TABLET OPTIMIZATIONS ===== */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .container {
+        padding: 20px;
+    }
+    
+    .wheel-container {
+        width: 350px;
+        height: 350px;
+    }
+    
+    .digit-box {
+        width: 40px;
+        height: 55px;
+        font-size: 1.6rem;
+    }
+    
+    .prize-selector {
+        grid-template-columns: repeat(4, 1fr);
     }
 }
 
