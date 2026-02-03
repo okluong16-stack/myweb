@@ -1691,3 +1691,4 @@ Nhấn nút ⛶ trong menu để trải nghiệm tốt hơn
 // Initialize keyboard help
 showKeyboardHelp();
 
+
