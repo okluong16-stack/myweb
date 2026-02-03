@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QUAY SỐ TRÚNG THƯỞNG</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <audio id="backgroundMusic" loop>
+        <source src="./audio/nhac.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <div class="container">
+        <!-- Mobile Header with Menu -->
+        <div class="mobile-header">
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="mobile-menu" id="mobileMenu">
+                <button class="mobile-menu-item" id="mobileSoundToggle">🔊 Nhạc nền</button>
+                <button class="mobile-menu-item" id="mobileFullscreenBtn">⛶ Toàn màn hình</button>
+                <button class="mobile-menu-item" id="mobileHelpBtn">❓ Hướng dẫn</button>
+            </div>
+        </div>
+        
+        <!-- Background Animation -->
+        <div class="bg-animation">
+            <div class="floating-shapes">
+                <div class="shape"></div>
+                <div class="shape"></div>
+                <div class="shape"></div>
+                <div class="shape"></div>
+            </div>
+            <div class="particles">
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+            </div>
+        </div>
+
+        <!-- Header -->
+        <header class="header">
+            <h1 class="main-title">
+                <span class="title-year">2025</span>
+                <span class="title-gradient">YEAR END PARTY</span>
+                <span class="title-year">CHÚC MỪNG NĂM MỚI 2026</span>
+            </h1>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Prize Selection -->
+            <section class="prize-section">
+                <h2 class="section-title">Chọn giải thưởng</h2>
+                <div class="prize-selector">
+                    <div class="prize-card" data-prize="special">
+                        <div class="prize-icon">🏆</div>
+                        <div class="prize-name">Giải Thịnh Vượng</div>
+                        <div class="prize-count" id="specialCount">0</div>
+                    </div>
+                    <div class="prize-card" data-prize="first">
+                        <div class="prize-icon">🥇</div>
+                        <div class="prize-name">Giải Hạnh Phúc</div>
+                        <div class="prize-count" id="firstCount">0</div>
+                    </div>
+                    <div class="prize-card" data-prize="second">
+                        <div class="prize-icon">🥈</div>
+                        <div class="prize-name">Giải Bình An</div>
+                        <div class="prize-count" id="secondCount">0</div>
+                    </div>
+                    <div class="prize-card" data-prize="third">
+                        <div class="prize-icon">🥉</div>
+                        <div class="prize-name">Giải Cộng Đồng</div>
+                        <div class="prize-count" id="thirdCount">0</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Wheel Section -->
+            <section class="wheel-section">
+                <div class="current-prize-display" id="currentPrizeDisplay">
+                    <span class="current-prize-text">Chọn giải thưởng để bắt đầu</span>
+                </div>
+                
+                <div class="wheel-container">
+                    <div class="wheel" id="wheel">
+                        <div class="wheel-inner">
+                            <div class="wheel-text" id="wheelText">
+                                <div class="digit-display" id="digitDisplay">
+                                    <div class="digit-box" id="digit0">0</div>
+                                    <div class="digit-box" id="digit1">0</div>
+                                    <div class="digit-box" id="digit2">0</div>
+                                    <div class="digit-box" id="digit3">0</div>
+                                    <div class="digit-box" id="digit4">0</div>
+                                    <div class="digit-box" id="digit5">0</div>
+                                    <div class="digit-box" id="digit6">0</div>
+                                    <div class="digit-box" id="digit7">0</div>
+                                </div>
+                                
+                                <span class="employee-name" id="displayName">TEST NHÂN PHẨM </br> Chúc mọi người may mắn ^^</span>
+                            </div>
+                        </div>
+                        <div class="wheel-border"></div>
+                    </div>
+                </div>
+
+                <!-- Control Buttons -->
+                <div class="controls">
+                    <button class="btn btn-primary" id="spinBtn" disabled>
+                        <span class="btn-text">BẮT ĐẦU QUAY</span>
+                        <div class="btn-glow"></div>
+                    </button>
+                    <button class="btn btn-secondary" id="resetBtn">
+                        <span class="btn-text">LÀM MỚI</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Winner Display -->
+            <section class="winner-section" id="winnerSection" style="display: none;">
+                <div class="winner-card">
+                    <div class="winner-header">
+                        <h2 class="winner-title">🎉 CHÚC MỪNG 🎉</h2>
+                    </div>
+                    <div class="winner-info">
+                        <div class="winner-code" id="winnerCode">--------</div>
+                        <div class="winner-name" id="winnerName">NHÂN VIÊN</div>
+                    </div>
+                    <div class="winner-effects">
+                        <div class="confetti"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Statistics -->
+            <section class="stats-section">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalEmployees">0</div>
+                        <div class="stat-label">Tổng NV</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="remainingEmployees">0</div>
+                        <div class="stat-label">Còn lại</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="winnerCount">0</div>
+                        <div class="stat-label">Đã trúng</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- History -->
+            <section class="history-section">
+                <div class="history-header">
+                    <h3>Lịch sử trúng giải</h3>
+                    <button class="btn btn-small" id="clearHistoryBtn">Xóa lịch sử</button>
+                </div>
+                <div class="history-list" id="historyList">
+                    <div class="history-empty">Chưa có ai trúng giải</div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2026 Lucky Draw - CNC Color MEG P.</p>
+        </footer>
+    </div>
+
+    <!-- Fireworks Canvas -->
+    <canvas id="fireworksCanvas"></canvas>
+
+    <script src="script.js"></script>
+</body>
+</html>
